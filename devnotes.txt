@@ -1,0 +1,63 @@
+            --- CONTENTS ---
+This file is meant to keep track of my thoughts while I'm working on the code. 
+
+
+            --- ABBREVIATIONS, ACRONYMS, & GLOSSARY  ---
+HEP-EX: High energy physics, experimental. Referring to experimental high energy physics. Almost always synonomous with experimental particle physics. 
+
+HEP-NUC: High energy physics, nuclear. Refering to nuclear physics. Heavy overlap with particle physics, but they are considered separate subfields. 
+
+bfrac: Branching fraction. Synonomous with branching ratio, but I don't want to be writing "brat" all over my code, so we're using this. The branching fraction lets us know the how often each possible decay mode is "used" in comparison to the others. For example:
+Cesium-132, a radioactive isotope of Cesium can decay via two modes: 1) beta decay, or 2) positron emission or electron capture. 98.1% of the decays are electron capture and positron emission, and 1.9% of the decays are beta decay. Therefore, we can say that the branching ratios are 0.981 and 0.019. 
+
+MeV: meaning Mega electron Volts, a unit of energy. 1 MeV = 10^6 eV. One electron volt is equivalent to the kineitc energy gained by one electron having been accelerated through a 1 volt potential. MeV/c is a measure of momentum and MeV/c^2 is a measure of mass. 
+
+
+            --- RAW NOTES ---
+
+
+Do I need to store branching fraction info? 
+
+Could I store this as a dict with values as tuples of allowed transitions and the respective branching fraction for each parent?
+
+Yeah, it does look like I need info about bfrac and allowed transitions. 
+It seems convenient to store them in the same object. 
+This will be stored in the transitions dict. 
+
+The transitions dict will be packed full of important info. 
+
+dict: transitions
+{
+    'parent1': [
+        ('daughter1', branching_fraction_1), 
+        ('daughter2', branching_fraction_2)
+    ]
+}
+
+We should make sure that the sum of all branching fraction is always 1 for each parent, but this can be checked later by a function to normalize the branching fractions. 
+Branching fraction normalization is low priority -> worry about this later. For now, just make sure it all sums to 1. 
+
+Later, you will need to make a function that makes this transition dict from command line arguments, or similar functionality. 
+
+SLOPPY: You've been using atom and isotope interchangably. This is bad. Stop this. Pick a consistent usage and stick to it soon. Maybe decide once the functionality is flushed out a bit more? Regardless, you'll need to address this at some point. 
+
+ANOTHER ISSUE: The usage of "transitions" vs. parent/daughter is also kind of sloppy. I like parent/daughter better since it's actually describing the two states better, i.e. 
+
+transition means the process state1 -> state2
+It is more of a "verb" concept, signifying change. 
+
+parent/daughter means the two states independent of time. 
+"parent" can become "daughter"
+if there are more than one daughters then, we can say that:
+parent can become daugher1 OR daughter2 OR daughter3 etc...
+
+The usage of parent/daughter is better for my purposes. 
+
+I'm not sure the origin of parent/daughter as terminology within the nuclear/particle physics community, but it's a real thing. I've been using it since early high school when I started learning about this stuff. For example, we call all the decay products of radon (an element and radioactive gas that is one of the leading causes of lung cancer) "radon daughters." 
+
+HEP-NUC seems to use parent/daughter terminology more than HEP-EX, but whatever. 
+
+
+It is important to remind myself that I need to embrace the fact that this code is supposed to be fully Monte Carlo. It would be increadibly easy to figure out the final state, and even the time evolution, of this system using the first order ordinary differential equations of radioactive decay, but that's not what we're doing. 
+
+For P = lambda * dt to remain valid, dt must be much smaller than the half life of the isotope. https://spark.iop.org/decay-constant-radioactive
